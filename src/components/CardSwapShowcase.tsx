@@ -99,7 +99,13 @@ export function CardSwap({
         <div
           ref={(el) => { cardsRef.current[index] = el; }}
           className="absolute rounded-3xl overflow-hidden cursor-pointer shadow-2xl border border-[#333333] bg-[#111111]"
-          style={{ width, height, transformOrigin: 'bottom left' }}
+          style={{ 
+            width, 
+            height, 
+            maxWidth: 'calc(100vw - 32px)', 
+            maxHeight: '55vh',
+            transformOrigin: 'bottom left' 
+          }}
           onClick={() => {
             if (activeCard !== index) {
               setActiveCard(index);

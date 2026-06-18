@@ -156,7 +156,15 @@ export const MasonryGallery: React.FC<MasonryGalleryProps> = ({
     const gridItems = items.map(child => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = col * (columnWidth + gap);
-      const height = (child.height / 400) * columnWidth; 
+      
+      // Calculate proportional height
+      let height = (child.height / 400) * columnWidth; 
+      
+      // Mobile optimization: prevent images from being overly tall on single/double columns
+      if (columns <= 2) {
+        height = Math.min(height, window.innerHeight * 0.55);
+      }
+
       const y = colHeights[col];
       colHeights[col] += height + gap;
       return { ...child, x, y, w: columnWidth, h: height };
