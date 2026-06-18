@@ -1,65 +1,202 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React from 'react';
+import './cafe.css';
+import { Inter } from "next/font/google";
+import { Home, Coffee, Info, Mail, Globe } from 'lucide-react';
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+import { TextPressure } from '@/components/TextPressure';
+import { MagnificationDock } from '@/components/MagnificationDock';
+import { MasonryGallery, MasonryItem } from '@/components/MasonryGallery';
+import { ExplodedView } from '@/components/ExplodedView';
+import { HorizontalScrollTicker } from '@/components/HorizontalScrollTicker';
+import { CardSwap, Card } from '@/components/CardSwapShowcase';
+
+const galleryItems: MasonryItem[] = [
+  { id: '1', img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop', height: 400, title: 'Morning Light' },
+  { id: '2', img: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop', height: 250, title: 'The Roast' },
+  { id: '3', img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop', height: 600, title: 'Cozy Corners' },
+  { id: '4', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop', height: 350, title: 'Latte Art' },
+  { id: '5', img: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=800&auto=format&fit=crop', height: 500, title: 'Barista Flow' },
+  { id: '6', img: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=800&auto=format&fit=crop', height: 300, title: 'Espresso Machine' },
+];
+
+export default function Home_Page() {
+  const dockItems = [
+    { icon: <Home size={22} />, label: 'Home', onClick: () => window.scrollTo(0, 0) },
+    { icon: <Coffee size={22} />, label: 'Menu', onClick: () => document.getElementById('menu')?.scrollIntoView() },
+    { icon: <Info size={22} />, label: 'About', onClick: () => document.getElementById('about')?.scrollIntoView() },
+    { icon: <Mail size={22} />, label: 'Contact', onClick: () => document.getElementById('contact')?.scrollIntoView() },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className={`min-h-screen w-full bg-midnight-bg text-[#ebebeb] font-satoshi antialiased selection:bg-midnight-accent selection:text-white overflow-x-hidden relative ${inter.variable}`}>
+      
+      {/* Top Navigation (Midnight Glass) */}
+      <nav className="fixed top-0 left-0 right-0 z-[100] px-6 py-6 flex items-center justify-between text-sm font-medium tracking-tight bg-[#111111]/80 backdrop-blur-xl border-b border-[#ffffff1a]">
+        <div className="flex items-center gap-10">
+          <a href="/" className="flex items-center group">
+            <div className="w-8 h-8 bg-white rounded flex items-center justify-center text-black font-extrabold text-xl transition-transform group-hover:rotate-12">B.</div>
+          </a>
+          <div className="hidden lg:flex items-center gap-8 text-[#888888]">
+            <a href="#" className="hover:text-white transition-colors">Origins</a>
+            <a href="#gallery" className="hover:text-white transition-colors">Atmosphere</a>
+            <a href="#menu" className="hover:text-white transition-colors">The Brew</a>
+          </div>
+        </div>
+        <div className="flex items-center gap-8">
+          <a href="#contact" className="px-5 py-2.5 bg-[#1a1a1a] hover:bg-white hover:text-black border border-[#333333] rounded-lg transition-all duration-300">
+            Visit Us
+          </a>
+        </div>
+      </nav>
+
+      {/* Floating Bottom Navigation */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[110] hidden md:block pointer-events-auto">
+        <MagnificationDock 
+          items={dockItems}
+          panelHeight={68}
+          baseItemSize={50}
+          magnification={80}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+      </div>
+
+      {/* Hero Section */}
+      <header className="relative h-screen w-full flex flex-col items-center justify-center">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#1a1a1a_0%,_#050505_70%)] opacity-60"></div>
+        </div>
+
+        <div className="relative z-10 w-full flex justify-center px-4">
+          <TextPressure 
+            text="MIDNIGHT BREW" 
+            className="text-[12vw] md:text-[10vw] font-bold text-center leading-none tracking-tighter"
+            maxDistance={400}
+          />
+        </div>
+
+        {/* Bottom UI Overlays */}
+        <div className="absolute bottom-32 left-8 md:left-12 flex items-center gap-5 group z-10">
+          <p className="text-xs md:text-sm font-medium leading-tight text-[#888888] group-hover:text-white transition-colors uppercase tracking-widest">
+            Est. 2024 <br/>
+            Tokyo &mdash; NY
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      {/* Exploded View Section */}
+      <ExplodedView />
+
+      {/* Horizontal Scroll Ticker */}
+      <HorizontalScrollTicker />
+
+      {/* Masonry Gallery Section */}
+      <section id="gallery" className="py-32 px-6 md:px-12 max-w-7xl mx-auto">
+        <div className="flex justify-between items-end mb-20 border-b border-[#222222] pb-10">
+          <h2 className="text-xs font-bold tracking-[0.4em] uppercase text-[#FF6B50]">The Atmosphere</h2>
+          <span className="hidden md:block text-[#444444] text-xs font-medium uppercase tracking-widest">Vol. 01</span>
         </div>
-      </main>
-    </div>
+        
+        <MasonryGallery 
+          items={galleryItems}
+          animateFrom="bottom"
+          blurToFocus={true}
+          stagger={0.1}
+          scaleOnHover={true}
+          hoverScale={0.97}
+          colorShiftOnHover={true}
+        />
+      </section>
+
+      {/* Card Swap Showcase Section */}
+      <section id="menu" className="py-32 overflow-hidden bg-[#111111] border-y border-[#222222]">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 mb-20 text-center">
+          <h2 className="text-4xl md:text-6xl font-satoshi font-semibold tracking-tighter mb-4">Our Signatures</h2>
+          <p className="text-[#888888] font-inter">Swipe through our most loved roasts.</p>
+        </div>
+        
+        <CardSwap delay={4000} cardDistance={60} verticalDistance={60}>
+          <Card className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex flex-col justify-between">
+            <div>
+              <h3 className="text-2xl font-bold text-[#FF6B50] mb-2 uppercase tracking-widest">01. The Midnight Blend</h3>
+              <p className="text-[#888888] leading-relaxed">Dark roasted beans sourced from the highlands of Ethiopia. Notes of dark chocolate, black cherry, and toasted almond.</p>
+            </div>
+            <div className="w-full h-48 bg-[#222222] rounded-xl overflow-hidden mt-8">
+              <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-luminosity" alt="Blend 1" />
+            </div>
+          </Card>
+          <Card className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex flex-col justify-between">
+            <div>
+              <h3 className="text-2xl font-bold text-[#FF6B50] mb-2 uppercase tracking-widest">02. Dawn Patrol</h3>
+              <p className="text-[#888888] leading-relaxed">A light, bright roast perfect for early mornings. Floral aromas with hints of jasmine, lemon zest, and honey.</p>
+            </div>
+            <div className="w-full h-48 bg-[#222222] rounded-xl overflow-hidden mt-8">
+              <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-luminosity" alt="Blend 2" />
+            </div>
+          </Card>
+          <Card className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex flex-col justify-between">
+            <div>
+              <h3 className="text-2xl font-bold text-[#FF6B50] mb-2 uppercase tracking-widest">03. Velvet Espresso</h3>
+              <p className="text-[#888888] leading-relaxed">Our signature espresso pull. Thick crema, heavy body, and a lingering sweet finish. The foundation of our lattes.</p>
+            </div>
+            <div className="w-full h-48 bg-[#222222] rounded-xl overflow-hidden mt-8">
+              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-luminosity" alt="Blend 3" />
+            </div>
+          </Card>
+        </CardSwap>
+      </section>
+
+      {/* Footer / Contact */}
+      <footer id="contact" className="relative pt-48 pb-32 px-6 md:px-12 border-t border-[#1a1a1a]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-16">
+          <div className="flex-1">
+            <h2 className="text-[14vw] md:text-[10vw] leading-[0.85] font-black tracking-tighter text-white mb-12 select-none">
+              LET'S<br />BREW.
+            </h2>
+            <div className="flex flex-col gap-6">
+              <a href="mailto:hello@midnightbrew.com" className="text-2xl sm:text-3xl md:text-4xl font-semibold hover:text-[#FF6B50] transition-all w-fit break-all">
+                hello@midnightbrew.com
+              </a>
+              <a href="https://wa.me/918580364890" target="_blank" rel="noopener noreferrer" className="text-xl sm:text-2xl md:text-3xl font-medium text-[#888888] hover:text-[#FF6B50] transition-all w-fit">
+                +91 85803 64890
+              </a>
+              <p className="text-[#666666] flex items-center gap-2 mt-4">
+                Available for private events and collaborations.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 md:mb-6">
+            <a href="#" className="w-14 h-14 border border-[#333333] rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all hover:-translate-y-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="#" className="w-14 h-14 border border-[#333333] rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all hover:-translate-y-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+            </a>
+            <a href="#" className="w-14 h-14 border border-[#333333] rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all hover:-translate-y-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" className="w-14 h-14 border border-[#333333] rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all hover:-translate-y-2">
+              <Globe className="w-5 h-5" />
+            </a>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto mt-40 pt-10 border-t border-[#111111] flex flex-col md:flex-row justify-between items-center text-[#333333] text-[10px] font-bold uppercase tracking-widest text-center md:text-left gap-4">
+          <p>&copy; 2024 Midnight Brew. All rights reserved.</p>
+          <p className="text-[#FF6B50]">This is a sample website we CHEMIKAZE built.</p>
+          <div className="flex gap-4 sm:gap-10 mt-6 md:mt-0 flex-wrap justify-center">
+            <a href="#" className="hover:text-[#666666] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[#666666] transition-colors">Terms of Service</a>
+          </div>
+        </div>
+      </footer>
+    </main>
   );
 }

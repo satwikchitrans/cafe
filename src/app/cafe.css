@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Midnight Editorial Palette */
+  --color-midnight-bg: #050505;
+  --color-midnight-accent: #FF6B50;
+
+  /* Fonts */
+  --font-satoshi: 'Satoshi', 'Inter', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('https://vgbujcuwptvheqijyjbe.supabase.co/storage/v1/object/public/hmac-uploads/uploads/4aed2f49-a476-436f-bae8-f31aa18f46fa/1767920861040-60c1c779/Satoshi-Variable.woff2') format('woff2');
+    font-weight: 300 900;
+    font-display: swap;
+    font-style: normal;
+}
