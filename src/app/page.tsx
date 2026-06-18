@@ -1,9 +1,7 @@
-'use client';
-
 import React from 'react';
 import './cafe.css';
 import { Inter } from "next/font/google";
-import { Home, Coffee, Info, Mail, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -11,34 +9,55 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
+
 import { TextPressure } from '@/components/TextPressure';
-import { MagnificationDock } from '@/components/MagnificationDock';
-import { MasonryGallery, MasonryItem } from '@/components/MasonryGallery';
+import { FloatingDock } from '@/components/FloatingDock';
+import { MasonryGallery } from '@/components/MasonryGallery';
 import { ExplodedView } from '@/components/ExplodedView';
 import { HorizontalScrollTicker } from '@/components/HorizontalScrollTicker';
 import { CardSwap, Card } from '@/components/CardSwapShowcase';
+import { supabase } from '@/lib/supabase';
 
-const galleryItems: MasonryItem[] = [
-  { id: '1', img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop', height: 400, title: 'Morning Light' },
-  { id: '2', img: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop', height: 250, title: 'The Roast' },
-  { id: '3', img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop', height: 600, title: 'Cozy Corners' },
-  { id: '4', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop', height: 350, title: 'Latte Art' },
-  { id: '5', img: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=800&auto=format&fit=crop', height: 500, title: 'Barista Flow' },
-  { id: '6', img: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=800&auto=format&fit=crop', height: 300, title: 'Espresso Machine' },
-];
+export const revalidate = 60;
 
-export default function Home_Page() {
-  const dockItems = [
-    { icon: <Home size={22} />, label: 'Home', onClick: () => window.scrollTo(0, 0) },
-    { icon: <Coffee size={22} />, label: 'Menu', onClick: () => document.getElementById('menu')?.scrollIntoView() },
-    { icon: <Info size={22} />, label: 'About', onClick: () => document.getElementById('about')?.scrollIntoView() },
-    { icon: <Mail size={22} />, label: 'Contact', onClick: () => document.getElementById('contact')?.scrollIntoView() },
+export default async function Home_Page() {
+  const { data: galleryItems } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+  const { data: signatureItems } = await supabase.from('signatures').select('*').order('created_at', { ascending: true });
+
+  const gallery = galleryItems && galleryItems.length > 0 ? galleryItems : [
+    { id: '1', img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop', height: 400, title: 'Morning Light' },
+    { id: '2', img: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop', height: 250, title: 'The Roast' },
+    { id: '3', img: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop', height: 600, title: 'Cozy Corners' },
+    { id: '4', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop', height: 350, title: 'Latte Art' },
+    { id: '5', img: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?q=80&w=800&auto=format&fit=crop', height: 500, title: 'Barista Flow' },
+    { id: '6', img: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=800&auto=format&fit=crop', height: 300, title: 'Espresso Machine' },
+  ];
+
+  const signatures = signatureItems && signatureItems.length > 0 ? signatureItems : [
+    {
+      id: 's1',
+      title: '01. The Midnight Blend',
+      description: 'Dark roasted beans sourced from the highlands of Ethiopia. Notes of dark chocolate, black cherry, and toasted almond.',
+      img: 'https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=800&auto=format&fit=crop'
+    },
+    {
+      id: 's2',
+      title: '02. Dawn Patrol',
+      description: 'A light, bright roast perfect for early mornings. Floral aromas with hints of jasmine, lemon zest, and honey.',
+      img: 'https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=800&auto=format&fit=crop'
+    },
+    {
+      id: 's3',
+      title: '03. Velvet Espresso',
+      description: 'Our signature espresso pull. Thick crema, heavy body, and a lingering sweet finish. The foundation of our lattes.',
+      img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop'
+    }
   ];
 
   return (
     <main className={`min-h-screen w-full bg-midnight-bg text-[#ebebeb] font-satoshi antialiased selection:bg-midnight-accent selection:text-white overflow-x-hidden relative ${inter.variable}`}>
       
-      {/* Top Navigation (Midnight Glass) */}
+      {/* Top Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-[100] px-6 py-6 flex items-center justify-between text-sm font-medium tracking-tight bg-[#111111]/80 backdrop-blur-xl border-b border-[#ffffff1a]">
         <div className="flex items-center gap-10">
           <a href="/" className="flex items-center group">
@@ -57,15 +76,7 @@ export default function Home_Page() {
         </div>
       </nav>
 
-      {/* Floating Bottom Navigation */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[110] hidden md:block pointer-events-auto">
-        <MagnificationDock 
-          items={dockItems}
-          panelHeight={68}
-          baseItemSize={50}
-          magnification={80}
-        />
-      </div>
+      <FloatingDock />
 
       {/* Hero Section */}
       <header className="relative h-screen w-full flex flex-col items-center justify-center">
@@ -81,7 +92,6 @@ export default function Home_Page() {
           />
         </div>
 
-        {/* Bottom UI Overlays */}
         <div className="absolute bottom-32 left-8 md:left-12 flex items-center gap-5 group z-10">
           <p className="text-xs md:text-sm font-medium leading-tight text-[#888888] group-hover:text-white transition-colors uppercase tracking-widest">
             Est. 2024 <br/>
@@ -90,10 +100,7 @@ export default function Home_Page() {
         </div>
       </header>
 
-      {/* Exploded View Section */}
       <ExplodedView />
-
-      {/* Horizontal Scroll Ticker */}
       <HorizontalScrollTicker />
 
       {/* Masonry Gallery Section */}
@@ -104,7 +111,7 @@ export default function Home_Page() {
         </div>
         
         <MasonryGallery 
-          items={galleryItems}
+          items={gallery}
           animateFrom="bottom"
           blurToFocus={true}
           stagger={0.1}
@@ -122,33 +129,17 @@ export default function Home_Page() {
         </div>
         
         <CardSwap delay={4000} cardDistance={60} verticalDistance={60}>
-          <Card className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex flex-col justify-between">
-            <div>
-              <h3 className="text-2xl font-bold text-[#FF6B50] mb-2 uppercase tracking-widest">01. The Midnight Blend</h3>
-              <p className="text-[#888888] leading-relaxed">Dark roasted beans sourced from the highlands of Ethiopia. Notes of dark chocolate, black cherry, and toasted almond.</p>
-            </div>
-            <div className="w-full h-48 bg-[#222222] rounded-xl overflow-hidden mt-8">
-              <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-luminosity" alt="Blend 1" />
-            </div>
-          </Card>
-          <Card className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex flex-col justify-between">
-            <div>
-              <h3 className="text-2xl font-bold text-[#FF6B50] mb-2 uppercase tracking-widest">02. Dawn Patrol</h3>
-              <p className="text-[#888888] leading-relaxed">A light, bright roast perfect for early mornings. Floral aromas with hints of jasmine, lemon zest, and honey.</p>
-            </div>
-            <div className="w-full h-48 bg-[#222222] rounded-xl overflow-hidden mt-8">
-              <img src="https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-luminosity" alt="Blend 2" />
-            </div>
-          </Card>
-          <Card className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex flex-col justify-between">
-            <div>
-              <h3 className="text-2xl font-bold text-[#FF6B50] mb-2 uppercase tracking-widest">03. Velvet Espresso</h3>
-              <p className="text-[#888888] leading-relaxed">Our signature espresso pull. Thick crema, heavy body, and a lingering sweet finish. The foundation of our lattes.</p>
-            </div>
-            <div className="w-full h-48 bg-[#222222] rounded-xl overflow-hidden mt-8">
-              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-luminosity" alt="Blend 3" />
-            </div>
-          </Card>
+          {signatures.map((sig) => (
+            <Card key={sig.id} className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl font-bold text-[#FF6B50] mb-2 uppercase tracking-widest">{sig.title}</h3>
+                <p className="text-[#888888] leading-relaxed">{sig.description}</p>
+              </div>
+              <div className="w-full h-48 bg-[#222222] rounded-xl overflow-hidden mt-8">
+                <img src={sig.img} className="w-full h-full object-cover opacity-60 mix-blend-luminosity" alt={sig.title} />
+              </div>
+            </Card>
+          ))}
         </CardSwap>
       </section>
 
