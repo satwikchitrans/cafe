@@ -109,9 +109,9 @@ export const MasonryGallery: React.FC<MasonryGalleryProps> = ({
   itemClassName
 }) => {
   const columns = useMedia(
-    ['(min-width: 1500px)', '(min-width: 1000px)', '(min-width: 600px)', '(min-width: 400px)'],
-    [5, 4, 3, 2],
-    1
+    ['(min-width: 1500px)', '(min-width: 1000px)', '(min-width: 600px)'],
+    [5, 4, 3],
+    2
   );
 
   const [containerRef, { width }] = useMeasure<HTMLDivElement>();
@@ -149,7 +149,7 @@ export const MasonryGallery: React.FC<MasonryGalleryProps> = ({
     if (!width) return { grid: [] as GridItem[], containerHeight: 0 };
 
     const colHeights = new Array(columns).fill(0);
-    const gap = 24; 
+    const gap = columns === 2 ? 12 : 24; // smaller gap on mobile
     const totalGaps = (columns - 1) * gap;
     const columnWidth = (width - totalGaps) / columns;
 
@@ -158,12 +158,7 @@ export const MasonryGallery: React.FC<MasonryGalleryProps> = ({
       const x = col * (columnWidth + gap);
       
       // Calculate proportional height
-      let height = (child.height / 400) * columnWidth; 
-      
-      // Mobile optimization: prevent images from being overly tall on single/double columns
-      if (columns <= 2) {
-        height = Math.min(height, window.innerHeight * 0.55);
-      }
+      const height = (child.height / 400) * columnWidth; 
 
       const y = colHeights[col];
       colHeights[col] += height + gap;
