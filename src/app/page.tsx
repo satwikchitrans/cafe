@@ -18,7 +18,7 @@ import { HorizontalScrollTicker } from '@/components/HorizontalScrollTicker';
 import { CardSwap, Card } from '@/components/CardSwapShowcase';
 import { supabase } from '@/lib/supabase';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function Home_Page() {
   const { data: galleryItems } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });

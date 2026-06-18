@@ -133,17 +133,32 @@ export default function AdminDashboard() {
   const handleUpdateSettings = async (e: React.FormEvent) => {
     e.preventDefault();
     setSavingSettings(true);
-    await supabase.from('site_settings').update({
-      site_name: settings.site_name,
-      hero_text: settings.hero_text,
-      email: settings.email,
-      whatsapp: settings.whatsapp,
-      instagram: settings.instagram,
-      twitter: settings.twitter,
-      delivery_link: settings.delivery_link
-    }).eq('id', settings.id);
+    
+    if (settings.id) {
+      await supabase.from('site_settings').update({
+        site_name: settings.site_name,
+        hero_text: settings.hero_text,
+        email: settings.email,
+        whatsapp: settings.whatsapp,
+        instagram: settings.instagram,
+        twitter: settings.twitter,
+        delivery_link: settings.delivery_link
+      }).eq('id', settings.id);
+    } else {
+      const { data } = await supabase.from('site_settings').insert([{
+        site_name: settings.site_name,
+        hero_text: settings.hero_text,
+        email: settings.email,
+        whatsapp: settings.whatsapp,
+        instagram: settings.instagram,
+        twitter: settings.twitter,
+        delivery_link: settings.delivery_link
+      }]).select().single();
+      if (data) setSettings(data);
+    }
+    
     setSavingSettings(false);
-    alert("Settings saved successfully! It might take 60 seconds to appear on the live site.");
+    alert("Settings saved successfully!");
   };
 
   const deleteGallery = async (id: string) => {
