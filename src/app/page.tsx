@@ -17,8 +17,23 @@ import { ExplodedView } from '@/components/ExplodedView';
 import { HorizontalScrollTicker } from '@/components/HorizontalScrollTicker';
 import { CardSwap, Card } from '@/components/CardSwapShowcase';
 import { supabase } from '@/lib/supabase';
-
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata() {
+  const { data: settingsRow } = await supabase.from('site_settings').select('*').single();
+  const siteName = settingsRow?.site_name || 'Midnight Brew';
+  const description = `${siteName} - Premium coffee, stunning atmosphere.`;
+
+  return {
+    title: siteName,
+    description: description,
+    openGraph: {
+      title: siteName,
+      description: description,
+      type: 'website',
+    },
+  };
+}
 
 export default async function Home_Page() {
   const { data: galleryItems } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });

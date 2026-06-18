@@ -380,7 +380,7 @@ export default function AdminDashboard() {
                         <p className="text-xs text-[#666666] mt-1">e.g. 918580364890 (Include country code, no + or spaces)</p>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-semibold mb-2">Instagram URL</label>
                           <input 
